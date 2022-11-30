@@ -36,6 +36,3 @@ class EventListener {
     this.callback(e);
   }
 }
-
-const globalEvents = new EventController();
-export default globalEvents;
