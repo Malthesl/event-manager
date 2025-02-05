@@ -6,11 +6,20 @@ export class EventController {
   }
 
   once(event, callback) {
-    let listener = new EventListener(event, () => {
-      callback();
+    let listener = new EventListener(event, e => {
+      callback(e);
       listener.remove();
     }, this);
     return listener;
+  }
+  
+  onceAsync(event) {
+    return new Promise(resolve => {
+      let listener = new EventListener(event, e => {
+        resolve(e);
+        listener.remove();
+      }, this);
+    });
   }
 
   emit(event, e) {
@@ -18,9 +27,12 @@ export class EventController {
       this.listeners[event].forEach(listener => listener.call(e));
     }
   }
-};
+}
 
-class EventListener {
+/**
+ * EventListener
+ */
+export class EventListener {
   constructor(event, callback, controller) {
     this.event = event;
     this.callback = callback;
