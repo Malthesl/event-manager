@@ -1,3 +1,6 @@
+/**
+ * Event Controller
+ */
 export class EventController {
   listeners = {};
 
@@ -30,7 +33,7 @@ export class EventController {
 }
 
 /**
- * EventListener
+ * Event Listener
  */
 export class EventListener {
   constructor(event, callback, controller) {
