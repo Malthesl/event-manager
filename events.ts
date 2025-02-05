@@ -41,7 +41,7 @@ export class EventController<M extends Record<string, any> = { [key: string]: an
 }
 
 /**
- * EventListener
+ * Event Listener
  */
 export class EventListener
 {
