@@ -1,4 +1,7 @@
-export class EventController<M extends Record<string, any> = {[key: string]: any}>
+/**
+ * Event Controller
+ */
+export class EventController<M extends Record<string, any> = { [key: string]: any }>
 {
   listeners: { [event: string]: EventListener[] } = {};
   
@@ -17,16 +20,30 @@ export class EventController<M extends Record<string, any> = {[key: string]: any
     return listener;
   }
   
+  onceAsync<K extends string = Extract<keyof M, string>> (event: K): Promise<M[K]>
+  {
+    return new Promise(resolve =>
+    {
+      let listener = new EventListener(event, e =>
+      {
+        resolve(e);
+        listener.remove();
+      }, this);
+    });
+  }
+  
   emit<K extends string = Extract<keyof M, string>> (event: K, e?: M[K])
   {
-    if (this.listeners[event])
-    {
+    if (this.listeners[event]) {
       this.listeners[event].forEach(listener => listener.call(e));
     }
   }
 }
 
-class EventListener
+/**
+ * EventListener
+ */
+export class EventListener
 {
   event: string;
   callback: (e?: any) => void;
@@ -37,7 +54,7 @@ class EventListener
     this.event = event;
     this.callback = callback;
     this.controller = controller;
-    (controller.listeners[event] ??= []).push(this);
+    ( controller.listeners[event] ??= [] ).push(this);
   }
   
   remove (): void
